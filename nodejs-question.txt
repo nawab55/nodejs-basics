@@ -1,0 +1,341 @@
+Here are 30+ Node.js interview questions ranging from beginner to advanced levels. Each question includes definitions, example usage, implementation details, and advantages where applicable.
+
+---
+
+### 1. **What is Node.js?**
+**Definition**: Node.js is an open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside a web browser.
+**Example Usage**:
+```bash
+node app.js
+```
+**Advantages**:
+- Non-blocking I/O
+- Fast performance with V8 engine
+- Single-threaded but scalable via event loop
+
+---
+
+### 2. **Explain the Event Loop in Node.js**
+**Definition**: It is a mechanism that handles asynchronous operations in Node.js.
+**Example Usage**:
+```js
+setTimeout(() => console.log('Delayed'), 1000);
+console.log('Immediate');
+```
+**Explanation**: 'Immediate' prints first, then 'Delayed'.
+**Advantages**: Allows non-blocking I/O operations.
+
+---
+
+### 3. **What is the difference between `process.nextTick()`, `setImmediate()`, and `setTimeout()`?**
+**Definition**:
+- `process.nextTick()`: Executes after the current operation.
+- `setImmediate()`: Executes in the check phase.
+- `setTimeout()`: Executes after the delay.
+
+**Example**:
+```js
+setTimeout(() => console.log('Timeout'), 0);
+setImmediate(() => console.log('Immediate'));
+process.nextTick(() => console.log('NextTick'));
+```
+**Output**: NextTick > Timeout/Immediate (depends)
+
+---
+
+### 4. **What is the purpose of `require` in Node.js?**
+**Definition**: Used to import modules.
+**Example**:
+```js
+const fs = require('fs');
+```
+**Advantages**:
+- Reusability
+- Separation of concerns
+
+---
+
+### 5. **Difference between CommonJS and ES Modules**
+**CommonJS**: Uses `require()` and `module.exports`
+**ES Modules**: Uses `import` and `export`
+**Example**:
+```js
+// CommonJS
+module.exports = myFunc;
+const myFunc = require('./module');
+
+// ESM
+export default myFunc;
+import myFunc from './module.js';
+```
+
+---
+
+### 6. **Explain Streams in Node.js**
+**Definition**: Streams handle reading/writing files in chunks.
+**Example**:
+```js
+const fs = require('fs');
+const readStream = fs.createReadStream('file.txt');
+readStream.on('data', chunk => console.log(chunk));
+```
+**Advantages**: Memory efficient, better for large files
+
+---
+
+### 7. **What are Buffers in Node.js?**
+**Definition**: Buffers represent binary data in memory.
+**Example**:
+```js
+const buf = Buffer.from('hello');
+console.log(buf.toString());
+```
+
+---
+
+### 8. **What is the difference between `fs.readFile` and `fs.createReadStream`?**
+- `fs.readFile`: Reads the entire file into memory.
+- `fs.createReadStream`: Reads file in chunks.
+
+**Example**:
+```js
+fs.readFile('bigfile.txt', cb);
+fs.createReadStream('bigfile.txt').pipe(res);
+```
+
+---
+
+### 9. **How does async/await work in Node.js?**
+**Definition**: Syntactic sugar for Promises.
+**Example**:
+```js
+async function getData() {
+  const res = await fetch('url');
+  return res.json();
+}
+```
+
+---
+
+### 10. **Explain Middleware in Express.js**
+**Definition**: Functions that execute during the lifecycle of a request.
+**Example**:
+```js
+app.use((req, res, next) => {
+  console.log('Request received');
+  next();
+});
+```
+
+---
+
+### 11. **How to handle errors in Express.js?**
+```js
+app.use((err, req, res, next) => {
+  res.status(500).send('Something broke!');
+});
+```
+
+---
+
+### 12. **What is clustering in Node.js?**
+**Definition**: Enables load balancing by using child processes.
+```js
+const cluster = require('cluster');
+if (cluster.isMaster) {
+  cluster.fork();
+} else {
+  require('./app');
+}
+```
+
+---
+
+### 13. **What is PM2?**
+**Definition**: Production process manager for Node.js apps.
+**Advantages**: Log management, clustering, restarts
+**Command**:
+```bash
+pm2 start app.js
+```
+
+---
+
+### 14. **What are environment variables?**
+**Usage**:
+```bash
+PORT=3000 node app.js
+```
+```js
+console.log(process.env.PORT);
+```
+
+---
+
+### 15. **Explain WebSocket in Node.js**
+**Definition**: Bi-directional communication protocol
+**Example (ws library)**:
+```js
+const WebSocket = require('ws');
+const server = new WebSocket.Server({ port: 8080 });
+server.on('connection', socket => {
+  socket.on('message', msg => console.log(msg));
+});
+```
+**Advantages**: Real-time apps like chat, live updates
+
+---
+
+### 16. **Implement a simple WebSocket server and client**
+**Server**:
+```js
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 });
+wss.on('connection', ws => {
+  ws.send('Hello Client');
+});
+```
+**Client**:
+```js
+const ws = new WebSocket('ws://localhost:8080');
+ws.onmessage = event => console.log(event.data);
+```
+
+---
+
+### 17. **What is `http` module in Node.js?**
+**Example**:
+```js
+const http = require('http');
+const server = http.createServer((req, res) => res.end('OK'));
+server.listen(3000);
+```
+
+---
+
+### 18. **What are child processes?**
+**Definition**: Allows running other scripts as subprocesses.
+```js
+const { exec } = require('child_process');
+exec('ls', (err, stdout) => console.log(stdout));
+```
+
+---
+
+### 19. **How to connect MongoDB in Node.js?**
+```js
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+```
+
+---
+
+### 20. **What is the use of `package.json`?**
+**Definition**: Describes the project and dependencies.
+```json
+{
+  "name": "app",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
+```
+
+---
+
+### 21. **What is npm and yarn?**
+**Definition**: Package managers for Node.js
+**Command**:
+```bash
+npm install express
+yarn add express
+```
+
+---
+
+### 22. **How to implement JWT in Node.js?**
+```js
+const jwt = require('jsonwebtoken');
+const token = jwt.sign({ userId: 123 }, 'secret');
+jwt.verify(token, 'secret');
+```
+
+---
+
+### 23. **Explain middleware chaining**
+**Example**:
+```js
+app.use(middleware1);
+app.use(middleware2);
+```
+**Each `next()` passes control to next middleware**
+
+---
+
+### 24. **What is the use of `body-parser`?**
+**Definition**: Parses incoming request bodies
+```js
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+```
+
+---
+
+### 25. **How to upload files in Node.js?**
+```js
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+app.post('/upload', upload.single('file'), (req, res) => res.send('Done'));
+```
+
+---
+
+### 26. **Explain CORS and how to handle it**
+**Definition**: Cross-Origin Resource Sharing
+```js
+const cors = require('cors');
+app.use(cors());
+```
+
+---
+
+### 27. **Explain `path` module usage**
+```js
+const path = require('path');
+console.log(path.join(__dirname, 'views', 'index.html'));
+```
+
+---
+
+### 28. **Create a REST API using Express.js**
+```js
+const express = require('express');
+const app = express();
+app.get('/api', (req, res) => res.json({ message: 'Hello' }));
+```
+
+---
+
+### 29. **What are global objects in Node.js?**
+- `__dirname`, `__filename`, `process`, `Buffer`
+
+---
+
+### 30. **Difference between synchronous and asynchronous code**
+- Sync blocks execution
+- Async uses callbacks, promises or async/await
+
+---
+
+### 31. **Write a custom event emitter**
+```js
+const EventEmitter = require('events');
+const emitter = new EventEmitter();
+emitter.on('start', () => console.log('Started'));
+emitter.emit('start');
+```
+
+---
+
+Let me know if you'd like this as a PDF or exported in another format.
+
